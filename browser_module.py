@@ -55,6 +55,11 @@ class webpage_handling:
         declaration_Check = self.driver.find_element(By.XPATH,"//input[@name='tnbed']")
         declaration_Check.click()
 
+    def continueButton(self):
+        wait = WebDriverWait(self.driver, 10)
+        continue_Button = wait.until(EC.element_to_be_clickable((By.XPATH,"//input[@id='bs_submit']")))
+        continue_Button.click()
+
 #start_time_data = target_row.find_element(By.CSS_SELECTOR,"span.bs_btn_autostart").text
 #                match = re.search(r"(\d{2}\.\d{2}\.),\s(\d{2}:\d{2})", start_time_data)
 #                if match:
