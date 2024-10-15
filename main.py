@@ -6,6 +6,9 @@ def go_webpage():
     webstuff.openWebpage(gui.url.get(),gui.course_number.get()) #open url and click on the button for course number
     webstuff.fillForm(gui.getData()) #fills in the form appearing on the new page
     webstuff.continueButton() #clicks on the continue button as soon as it is available
+    webstuff.optionalEmail()
+                           
+#if email is asked again, fill it out
 
 root = datagui.tk.Tk()
 
