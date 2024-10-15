@@ -6,7 +6,8 @@ from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By #to locate elements
 from selenium.webdriver.support.ui import Select, WebDriverWait #to get select objects
 from selenium.webdriver.support import expected_conditions as EC #for condition fulfillment
-from selenium.common.exceptions import NoSuchElementException #exception handling
+from selenium.common.exceptions import NoSuchElementException, TimeoutException #exception handling
+from selenium.webdriver.firefox.service import Service
 
 class webpage_handling:
     def __init__(self) -> None:
@@ -15,6 +16,9 @@ class webpage_handling:
         userAgent = ua.random
         options.set_preference("general.useragent.override", userAgent)
         self.driver = webdriver.Firefox(options=options)
+        #geckodriver_path = "./geckodriver"
+        #service = Service(geckodriver_path)
+        #self.driver = webdriver.Firefox(options=options,service=service)
 
     def openWebpage(self,url,course_number):
         self.driver.get(url)
@@ -41,6 +45,7 @@ class webpage_handling:
         self.driver.switch_to.window(new_tab) 
 
     def fillForm(self,user_data):
+        self.emailopt = user_data['email']
         wait = WebDriverWait(self.driver,10)
         gender_Button=wait.until(EC.visibility_of_element_located((By.XPATH,f"//input[@name='sex' and @value='{user_data['sex']}']")))
         gender_Button.click()
@@ -59,7 +64,20 @@ class webpage_handling:
         wait = WebDriverWait(self.driver, 10)
         continue_Button = wait.until(EC.element_to_be_clickable((By.XPATH,"//input[@id='bs_submit']")))
         continue_Button.click()
+    
+    def finalButton(self):
+        wait = WebDriverWait(self.driver,10)
+        fee_button = wait.until(EC.visibility_of_element_located((By.XPATH,"//input[@value='kostenpflichtig buchen']")))
+        fee_button.click()
 
+    def optionalEmail(self):
+        wait = WebDriverWait(self.driver, 3)
+        try:
+            optional_field = wait.until(EC.visibility_of_element_located((By.XPATH,"//input[starts-with(@name,'email_check')]")))
+        except TimeoutException:
+            return
+        else:
+            optional_field.send_keys(self.emailopt)
 #start_time_data = target_row.find_element(By.CSS_SELECTOR,"span.bs_btn_autostart").text
 #                match = re.search(r"(\d{2}\.\d{2}\.),\s(\d{2}:\d{2})", start_time_data)
 #                if match:
