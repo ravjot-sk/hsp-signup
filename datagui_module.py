@@ -50,6 +50,15 @@ class gui_setup:
         self.user_list_box.state(["readonly"])
         self.existing_users_box()
         self.entries = {}
+        #sex_var = tk.StringVar(value="Not Specified")  # Default value
+        #frmm = ttk.Frame(frm,padding=3)
+        #frmm.grid()
+# Create radio buttons for sex selection
+        #ttk.Radiobutton(frmm, text="Male", variable=sex_var, value="M").grid(row=0, column=0, sticky=tk.W)
+        #ttk.Radiobutton(frmm, text="Female", variable=sex_var, value="W").grid(row=0,column=1,sticky=tk.W)
+        #ttk.Radiobutton(frmm, text="Diverse", variable=sex_var, value="D").grid(row=0,column=2,sticky=tk.W)
+        #ttk.Radiobutton(frmm, text="N/A", variable=sex_var, value="X").grid(row=0,column=3,sticky=tk.W)
+
         i=1
         for x in self.keys:
             ttk.Label(frm,text=self.form_display[x]).grid(column=0,row=i)
@@ -106,4 +115,3 @@ class gui_setup:
             messagebox.showinfo("Saved", f"Your data has been saved!")
         else:
             messagebox.showwarning("Input Error", "Please fill in all fields")
-    
