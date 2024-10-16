@@ -9,16 +9,20 @@ from selenium.webdriver.support import expected_conditions as EC #for condition 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException #exception handling
 from selenium.webdriver.firefox.service import Service
 
+class ButtonNotThere(Exception):
+    pass
+
 class webpage_handling:
     def __init__(self) -> None:
         options = Options()
         ua = UserAgent()
         userAgent = ua.random
         options.set_preference("general.useragent.override", userAgent)
-        self.driver = webdriver.Firefox(options=options)
-        #geckodriver_path = "./geckodriver"
-        #service = Service(geckodriver_path)
-        #self.driver = webdriver.Firefox(options=options,service=service)
+        #self.driver = webdriver.Firefox(options=options)
+        geckodriver_path = "./geckodriver"
+        service = Service(geckodriver_path)
+        self.driver = webdriver.Firefox(options=options,service=service)
+        self.timeflag= True
 
     def openWebpage(self,url,course_number):
         self.driver.get(url)
@@ -34,15 +38,22 @@ class webpage_handling:
                 #booking_button = wait.until(EC.presence_of_element_located((By.XPATH,button_path)))
                 break
             except NoSuchElementException:
-                print("Button not found, refreshing...")
-                self.driver.refresh()
-                time.sleep(5) 
+                if self.timeflag:
+                    start_time_data = target_row.find_element(By.CSS_SELECTOR,"span.bs_btn_autostart").text
+                    match = re.search(r"(\d{2})\.(\d{2})\.,\s(\d{2}):(\d{2})", start_time_data)
+                    return match
+                
+                else:
+                    print("Button not found, refreshing...")
+                    self.driver.refresh()
+                    time.sleep(5) 
         #booking_button = target_row.find_element(By.CSS_SELECTOR, "input.bs_btn_buchen")
         booking_button.click()
         original_window = self.driver.current_window_handle
         all_windows = self.driver.window_handles
         new_tab = all_windows[-1]  # Assuming the new tab is the last one opened
         self.driver.switch_to.window(new_tab) 
+        return None
 
     def fillForm(self,user_data):
         self.emailopt = user_data['email']
