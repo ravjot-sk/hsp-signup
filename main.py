@@ -24,6 +24,7 @@ def go_webpage():
     webstuff.fillForm(gui.getData()) #fills in the form appearing on the new page
     webstuff.continueButton() #clicks on the continue button as soon as it is available
     webstuff.optionalEmail() #if email is asked again, fill it out
+    webstuff.finalButton() #FINAL BUTTON
 
 def go_webpage_withflag():
     print("\nrunning without flag\n")

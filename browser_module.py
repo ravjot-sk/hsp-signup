@@ -8,21 +8,38 @@ from selenium.webdriver.support.ui import Select, WebDriverWait #to get select o
 from selenium.webdriver.support import expected_conditions as EC #for condition fulfillment
 from selenium.common.exceptions import NoSuchElementException, TimeoutException #exception handling
 from selenium.webdriver.firefox.service import Service
+from selenium_stealth import stealth
 
 class ButtonNotThere(Exception):
     pass
 
 class webpage_handling:
-    def __init__(self) -> None:
-        options = Options()
-        ua = UserAgent()
-        userAgent = ua.random
-        options.set_preference("general.useragent.override", userAgent)
-        #self.driver = webdriver.Firefox(options=options)
-        geckodriver_path = "./geckodriver"
-        service = Service(geckodriver_path)
-        self.driver = webdriver.Firefox(options=options,service=service)
-        self.timeflag= True
+    def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument("start-maximized")
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
+        self.driver = webdriver.Chrome(options=options)
+
+        stealth(self.driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+        )
+        self.timeflag = True
+    #def __init__(self) -> None:
+    #    options = Options()
+    #    ua = UserAgent()
+    #    userAgent = ua.random
+    #    options.set_preference("general.useragent.override", userAgent)
+    #    #self.driver = webdriver.Firefox(options=options)
+    #    geckodriver_path = "./geckodriver"
+    #    service = Service(geckodriver_path)
+    #    self.driver = webdriver.Firefox(options=options,service=service)
+    #    self.timeflag= True
 
     def openWebpage(self,url,course_number):
         self.driver.get(url)
