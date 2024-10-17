@@ -55,8 +55,8 @@ def auxillary():
     root.withdraw()
     actual_time = go_webpage()
     if actual_time:
-        #target_time = actual_time - datetime.timedelta(seconds=30)
-        target_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        target_time = actual_time - datetime.timedelta(seconds=30)
+        #target_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
         #print(target_time)
         scheduler = BackgroundScheduler()
         scheduler.add_job(go_webpage_withflag,trigger=DateTrigger(run_date=target_time))
