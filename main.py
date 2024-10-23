@@ -24,7 +24,7 @@ def go_webpage():
     webstuff.fillForm(gui.getData()) #fills in the form appearing on the new page
     webstuff.continueButton() #clicks on the continue button as soon as it is available
     webstuff.optionalEmail() #if email is asked again, fill it out
-    webstuff.finalButton() #FINAL BUTTON
+    #webstuff.finalButton() #FINAL BUTTON
 
 def go_webpage_withflag():
     print("\nrunning without flag\n")
@@ -95,8 +95,7 @@ root.bind("<FocusIn>",lambda e: root.attributes("-topmost",False))
 
 #root.after(3000, lambda: root.attributes("-topmost", False))
 
-users = datagui.user_data() #handles the user data stored in file
-gui = datagui.gui_setup(root,users) #sets up the gui for user data
+gui = datagui.gui_setup(root) #sets up the gui for user data
 webstuff = browser.webpage_handling() #sets up the browser
 
 gui.submit_button.config(command = auxillary) #binds the submit button of gui to sending data to browser
