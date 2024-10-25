@@ -87,6 +87,7 @@ def dismiss():
 
 
 root = datagui.tk.Tk()
+root.title("User Input Form")
 
 #Force tkinter window to be the topmost window and disable this 
 root.attributes("-topmost", True)
