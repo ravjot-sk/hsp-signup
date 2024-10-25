@@ -90,6 +90,13 @@ class gui_setup:
         person['sex']=self.sex_var.get()
         return person
     
+    def getData_user2(self):
+        person={}
+        for x in self.form_display_2:
+            person[x] = self.entries_2[x].get()
+        person['sex_2'] = self.sex_var_2.get()
+        return person
+    
     #method to load user names into dropdown box of existing users
     def existing_users_box(self):
         if self.data.existing_data:

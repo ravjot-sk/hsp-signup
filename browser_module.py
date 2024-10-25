@@ -88,6 +88,17 @@ class webpage_handling:
         declaration_Check = self.driver.find_element(By.XPATH,"//input[@name='tnbed']")
         declaration_Check.click()
 
+    def fillForm_user2(self,user_data):
+        wait = WebDriverWait(self.driver,10)
+        gender_Button = self.driver.find_element(By.XPATH,f"//input[@name='sex_2' and @value='{user_data['sex_2']}']")
+        gender_Button.click()
+        status_Input= self.driver.find_element(By.XPATH,"//select[@name='statusorig_2']")
+        select = Select(status_Input)
+        select.select_by_value('S-WWU')
+        wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='matnr_2']")))
+        for x in user_data:
+            self.driver.find_element(By.XPATH,f"//input[@name='{x}']").send_keys(user_data[x])
+
     def continueButton(self):
         wait = WebDriverWait(self.driver, 10)
         continue_Button = wait.until(EC.element_to_be_clickable((By.XPATH,"//input[@id='bs_submit']")))

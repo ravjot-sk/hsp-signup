@@ -22,7 +22,10 @@ def go_webpage():
         registration = datetime.datetime(year,month,day,hour,minute)
         return registration
     webstuff.fillForm(gui.getData()) #fills in the form appearing on the new page
-    webstuff.continueButton() #clicks on the continue button as soon as it is available
+    if gui.dance_var.get():
+        webstuff.fillForm_user2(gui.getData_user2())
+    
+    #webstuff.continueButton() #clicks on the continue button as soon as it is available
     webstuff.optionalEmail() #if email is asked again, fill it out
     #webstuff.finalButton() #FINAL BUTTON
 
