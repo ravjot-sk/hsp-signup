@@ -3,10 +3,37 @@ from tkinter import ttk
 from tkinter import messagebox
 from data_module import user_data
 
+
+html_keys = [["vorname","name","strasse","ort","geburtsdatum","email","telefon","matnr","sex","iban"],
+             ["vorname_2","name_2","strasse_2","ort_2","geburtsdatum_2","email_2","telefon_2","matnr_2","sex_2"]]
+
+gui_form_display = [
+    {
+            "vorname" : "First Name", 
+            "name": "Last Name", 
+            "strasse": "Street and Nr", 
+            "ort" : "PLZ and City", 
+            "geburtsdatum": "Birthday(dd.mm.yyyy)", 
+            "email": "Email", 
+            "telefon": "Telephone", 
+            "matnr": "Matrikel Nummer", 
+            "iban" : "IBAN"
+            },
+    {
+            "vorname_2" : "First Name", 
+            "name_2": "Last Name", 
+            "strasse_2": "Street and Nr", 
+            "ort_2" : "PLZ and City", 
+            "geburtsdatum_2": "Birthday(dd.mm.yyyy)", 
+            "email_2": "Email", 
+            "telefon_2": "Telephone", 
+            "matnr_2": "Matrikel Nummer", 
+            }
+]
+
 class gui_setup:
     def __init__(self,root) -> None:
         self.data = user_data()
-        self.keys = ["vorname","name","strasse","ort","geburtsdatum","email","telefon","matnr","sex","iban"]
         self.form_display = {
             "vorname" : "First Name", 
             "name": "Last Name", 
@@ -42,6 +69,7 @@ class gui_setup:
         self.course_number.grid(column = 2,row = self.row_counter)
         self.row_counter += 1
 
+#Option for a second user for two people courses
         self.dance_course(root)
         self.dance_var = tk.IntVar()
         self.danceButton = ttk.Checkbutton(self.user1_frame,text="Two person course: ",variable=self.dance_var, command=self.lets_dance)
@@ -54,18 +82,25 @@ class gui_setup:
         self.submit_button = tk.Button(self.frm_submitButton,text="Submit Form")
         self.submit_button.grid() 
     
+#Layout setup for user1 data
     def user1_gui(self):
         ttk.Label(self.user1_frame,text="Enter User Data").grid(column=0,row=self.row_counter,columnspan=3)
         self.row_counter += 1
         ttk.Label(self.user1_frame,text="Existing users: ").grid(column=0,row=self.row_counter, columnspan=2)
-        self.display_var = tk.StringVar()
-        self.user_list_box = ttk.Combobox(self.user1_frame,textvariable=self.display_var)
-        self.user_list_box.grid(column=2,row=self.row_counter)
+        selected_user1 = tk.StringVar()
+        user_list_box = ttk.Combobox(self.user1_frame,textvariable=selected_user1)
+        user_list_box.grid(column=2,row=self.row_counter)
         self.row_counter += 1
-        self.user_list_box.state(["readonly"])
-        self.existing_users_box()
+        user_list_box.state(["readonly"])
+        if self.data.existing_data:
+            self.users = [person['vorname'] for person in self.data.existing_data]
+            user_list_box['values']= self.users
+
+        user_list_box.bind("<<ComboboxSelected>>", lambda event: self.autofill_data(user_list_box.get()))
+
+        #self.existing_users_box()
         self.entries = {}
-        self.sex_var = tk.StringVar(value="X")  # Default value
+        self.sex_var = tk.StringVar(value="X")
 # Create radio buttons for sex selection
         frm_radioButtons=ttk.Frame(self.user1_frame,padding=3)
         frm_radioButtons.grid(column=0,row=self.row_counter,columnspan=4)
@@ -106,8 +141,7 @@ class gui_setup:
         self.user_list_box.bind("<<ComboboxSelected>>", lambda event: self.autofill_data())
 
     #method to autofill existing user data into entry fields 
-    def autofill_data(self):
-        person = self.user_list_box.get()
+    def autofill_data(self,person):
         for x in self.data.existing_data:
             if x['vorname']==person:
                 person_data = x
@@ -128,13 +162,9 @@ class gui_setup:
         else:
             messagebox.showwarning("Input Error", "Please fill in all fields")
 
+
     def dance_course(self,root):
         self.user2_frame = ttk.Frame(root,padding=10)
-        self.keys_2 = [
-            key + "_2" 
-            for key in self.keys 
-            if key != "iban"
-        ]
         self.form_display_2 = {
             key+"_2" : value 
             for key,value in self.form_display.items()
@@ -146,8 +176,8 @@ class gui_setup:
         local_row_counter += 1
 
         ttk.Label(self.user2_frame,text="Existing users: ").grid(column=0,row=local_row_counter, columnspan=2)
-        self.display_var_2 = tk.StringVar()
-        self.user_list_box_2 = ttk.Combobox(self.user2_frame,textvariable=self.display_var_2)
+        self.selected_user2 = tk.StringVar()
+        self.user_list_box_2 = ttk.Combobox(self.user2_frame,textvariable=self.selected_user2)
         self.user_list_box_2.grid(column=2,row=local_row_counter)
         local_row_counter +=1
         self.user_list_box_2.state(["readonly"])
